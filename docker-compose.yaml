@@ -1,0 +1,15 @@
+version: '3.5'
+
+name: 'ventsolutions'
+
+services:
+  db:
+    container_name: vs-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+    image: postgres:14.3-alpine
+    volumes:
+      - /c/Users/Gregory/PycharmProjects/ventsolutions/pg_data:/var/lib/postgresql/data
