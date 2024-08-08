@@ -4,7 +4,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Category, Product, Image
-from .serializer import CategorySerializer, ProductSerializer, ProductDetailSerializer, ProductPaginationSerializer
+from .serializer import CategorySerializer, ProductSerializer, ProductDetailSerializer, ProductPaginationSerializer, \
+    CategoryDetailSerializer
 
 
 class CategoryAPIView(generics.ListAPIView):
@@ -29,6 +30,14 @@ class ProductDetailAPIView(APIView):
         return Response(serializer.data)
 
 
+class CategoryDetailAPIView(APIView):
+    def get(self, request, *args, **kwargs):
+        _id = self.kwargs['id']
+        category = Category.objects.get(id=_id)
+        serializer = CategoryDetailSerializer(category, many=False)
+        return Response(serializer.data)
+
+
 class ProductAPIListPagination(PageNumberPagination):
     page_size = 2
     page_size_query_param = 'page_size'
@@ -40,5 +49,5 @@ class ProductPaginationAPIView(generics.ListAPIView):
     pagination_class = ProductAPIListPagination
 
     def get_queryset(self):
-        category_id = self.kwargs['category_id']
-        return Product.objects.filter(category__id=category_id)
+        category_ids = self.request.query_params['categoryIds'].split(',')
+        return Product.objects.filter(category__id__in=category_ids)

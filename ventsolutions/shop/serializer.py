@@ -5,7 +5,7 @@ from .models import Category, Product, Image, Characteristic
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = '__all__'
+        fields = ('id', 'name', 'image_path', 'translation', 'parent_id')
 
         def get_photo_url(self, obj):
             request = self.context.get('request')
@@ -42,7 +42,8 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('part_number', 'name', 'price', 'discount', 'description', 'in_stock', 'images', 'characteristics')
+        fields = ('id', 'part_number', 'name', 'translation', 'price', 'discount', 'description', 'in_stock', 'images',
+                  'characteristics', 'category_id')
 
     @staticmethod
     def get_images(obj):
@@ -53,6 +54,17 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     def get_characteristics(obj):
         characteristics = Characteristic.objects.filter(product=obj)
         return CharacteristicSerializer(characteristics, many=True).data
+
+
+class CategoryDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ('id', 'name', 'image_path', 'translation', 'parent_id', 'description')
+
+        def get_photo_url(self, obj):
+            request = self.context.get('request')
+            photo_url = obj.fingerprint.url
+            return request.build_absolute_uri(photo_url)
 
 
 class CharacteristicSerializer(serializers.ModelSerializer):
@@ -66,7 +78,7 @@ class ProductPaginationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('id', 'part_number', 'name', 'price', 'discount', 'description', 'in_stock', 'main_image')
+        fields = ('id', 'part_number', 'name', 'price', 'discount', 'in_stock', 'translation', 'main_image')
 
     @staticmethod
     def get_main_image(obj):

@@ -14,21 +14,17 @@ python -m venv .venv
 
 ## Запуск/остановка виртуального окружения
 
+### Windows
 ```
 .venv\Scripts\activate
 ```
 
+### Linux
+```
+source .venv/bin/activate
+```
+
+
 ```
 .venv\Scripts\deactivate
-```
-
-
-# Черновик
-
-```
-pip install django==4.2.1
-pip install psycopg2
-python manage.py runserver
-pip install Pillow
-pip install djangorestframework
 ```

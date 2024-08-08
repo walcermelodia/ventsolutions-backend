@@ -9,7 +9,10 @@ class Category(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     name = models.CharField('Название', max_length=256)
     image = models.ImageField('Изображение', name='image_path', upload_to='categories/')
-    parent = models.ForeignKey('self', verbose_name='Родительская категория', on_delete=models.SET_NULL, blank=True, null=True)
+    description = models.TextField('Описание', null=True)
+    translation = models.CharField('Транслитерация названия', max_length=256)
+    parent = models.ForeignKey('self', verbose_name='Родительская категория', on_delete=models.SET_NULL, blank=True,
+                               null=True)
 
     def __str__(self):
         return self.name
@@ -27,6 +30,7 @@ class Product(models.Model):
     price = models.DecimalField('Цена', decimal_places=2, max_digits=12, validators=[MinValueValidator(Decimal('0.0'))])
     discount = models.PositiveIntegerField('Скидка', validators=[MinValueValidator(0)])
     description = models.TextField('Описание')
+    translation = models.CharField('Транслитерация названия', max_length=256)
     in_stock = models.BooleanField('Наличие товара', default=True)
     category = models.ForeignKey(Category, verbose_name="Категория", on_delete=models.SET_NULL, null=True)
 
@@ -60,10 +64,3 @@ class Characteristic(models.Model):
     class Meta:
         verbose_name = 'Характеристика товара'
         verbose_name_plural = 'Характеристики товаров'
-
-
-
-
-
-
-
