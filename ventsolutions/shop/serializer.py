@@ -45,10 +45,10 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         fields = ('id', 'part_number', 'name', 'translation', 'price', 'discount', 'description', 'in_stock', 'images',
                   'characteristics', 'category_id')
 
-    @staticmethod
-    def get_images(obj):
+    def get_images(self, obj):
         images = Image.objects.filter(product=obj)
-        return ImageSerializer(images, many=True).data
+
+        return ImageSerializer(images, many=True, context={'request': self.context['request']}).data
 
     @staticmethod
     def get_characteristics(obj):
@@ -80,7 +80,6 @@ class ProductPaginationSerializer(serializers.ModelSerializer):
         model = Product
         fields = ('id', 'part_number', 'name', 'price', 'discount', 'in_stock', 'translation', 'main_image')
 
-    @staticmethod
-    def get_main_image(obj):
+    def get_main_image(self, obj):
         main_image = Image.objects.filter(product=obj, is_main=True).first()
-        return ImageSerializer(main_image).data
+        return ImageSerializer(main_image, context={'request': self.context['request']}).data
