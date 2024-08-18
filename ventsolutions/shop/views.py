@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -7,10 +7,6 @@ from .models import Category, Product
 from .serializer import CategorySerializer, ProductSerializer, ProductDetailSerializer, ProductPaginationSerializer, \
     CategoryDetailSerializer
 
-
-# class CategoryAPIView(generics.ListAPIView):
-#     queryset = Category.objects.all()
-#     serializer_class = CategorySerializer
 
 def bin_search(l, r, data, id):
     while l < r:
@@ -108,3 +104,26 @@ class ProductPaginationAPIView(generics.ListAPIView):
     def get_serializer(self, *args, **kwargs):
         kwargs['context'] = {'request': self.request}
         return ProductPaginationSerializer(*args, **kwargs)
+
+
+class ProductSearchPaginationAPIView(generics.ListAPIView):
+    serializer_class = ProductPaginationSerializer
+    pagination_class = ProductAPIListPagination
+
+    def get_queryset(self):
+        q_search = self.request.query_params['q']
+        return Product.objects.filter(name__icontains=q_search)
+
+    def get_serializer(self, *args, **kwargs):
+        kwargs['context'] = {'request': self.request}
+        return ProductPaginationSerializer(*args, **kwargs)
+
+
+class Feedback(APIView):
+    def post(self, request):
+        return Response(status=status.HTTP_201_CREATED)
+
+
+class Order(APIView):
+    def post(self, request):
+        return Response(status=status.HTTP_201_CREATED)
