@@ -9,10 +9,10 @@ from shop.views import CategoryAPIView, ProductDetailAPIView, ProductPaginationA
 urlpatterns = [
     path('admin/', admin.site.urls),  # админка
     path('api/v1/categories', CategoryAPIView.as_view()),  # все категории
-    path('api/v1/categories/<int:id>', CategoryDetailAPIView.as_view()),  # подробная информация по категории
+    path('api/v1/categories/<str:id>', CategoryDetailAPIView.as_view()),  # подробная информация по категории
     path('api/v1/products', ProductPaginationAPIView.as_view()),  # все товары по главной категории и ее подкатегориям
     path('api/v1/products/search', ProductSearchPaginationAPIView.as_view()),  # поиск товара по названию
-    path('api/v1/products/<int:id>', ProductDetailAPIView.as_view()),  # подробная информация о товаре
+    path('api/v1/products/<str:id>', ProductDetailAPIView.as_view()),  # подробная информация о товаре
     path('api/v1/feedbacks', Feedback.as_view()),  # обратная связь
     path('api/v1/orders', Order.as_view()),  # оформить заказ
     path('ckeditor/', include('ckeditor_uploader.urls')),

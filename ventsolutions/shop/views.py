@@ -50,7 +50,7 @@ class ProductAPIView(generics.ListAPIView):
 class ProductDetailAPIView(APIView):
     def get(self, request, *args, **kwargs):
         _id = self.kwargs['id']
-        product = Product.objects.get(id=_id)
+        product = Product.objects.get(translation=_id)
         serializer = ProductDetailSerializer(product, many=False, context={'request': self.request})
         return Response(serializer.data)
 
@@ -58,7 +58,7 @@ class ProductDetailAPIView(APIView):
 class CategoryDetailAPIView(APIView):
     def get(self, request, *args, **kwargs):
         _id = self.kwargs['id']
-        category = Category.objects.get(id=_id)
+        category = Category.objects.get(translation=_id)
 
         serializer = CategoryDetailSerializer(category, many=False, context={'request': self.request})
         return Response(serializer.data)
@@ -86,20 +86,22 @@ class ProductPaginationAPIView(generics.ListAPIView):
         # category_ids = self.request.query_params['categoryIds'].split(',')
         category_ids_qp = None
         product_ids_qp = None
+        categories = []
         if 'categoryIds' in self.request.query_params:
             category_ids_qp = self.request.query_params['categoryIds']
-
+            for e in Category.objects.filter(translation__in=category_ids_qp.split(',')):
+                categories.append(e.id)
         if 'productIds' in self.request.query_params:
             product_ids_qp = self.request.query_params['productIds']
 
         if category_ids_qp is None and product_ids_qp is None:
             return Product.objects.all().order_by('-id')[:10:1]
         elif category_ids_qp is not None and product_ids_qp is not None:
-            return Product.objects.filter(category__id__in=category_ids_qp.split(','), id__in=product_ids_qp.split(','))
+            return Product.objects.filter(category__id__in=categories, translation__in=product_ids_qp.split(','))
         elif category_ids_qp is not None:
-            return Product.objects.filter(category__id__in=category_ids_qp.split(','))
+            return Product.objects.filter(category__id__in=categories)
         elif product_ids_qp is not None:
-            return Product.objects.filter(id__in=product_ids_qp.split(','))
+            return Product.objects.filter(translation__in=product_ids_qp.split(','))
 
     def get_serializer(self, *args, **kwargs):
         kwargs['context'] = {'request': self.request}
