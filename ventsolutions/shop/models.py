@@ -46,7 +46,7 @@ class Image(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     path = models.ImageField('Изображение', name='path', upload_to='products/images/')
-    is_main = models.BooleanField('Главное изображение карточки товара', default=True)
+    is_main = models.BooleanField('Главное изображение товара', default=True)
     product = models.ForeignKey(Product, verbose_name='Товар', on_delete=models.CASCADE, null=False)
 
     class Meta:
