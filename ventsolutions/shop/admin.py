@@ -15,7 +15,7 @@ class ProductAdminForm(forms.ModelForm):
 
 
 class CategoryAdminForm(forms.ModelForm):
-    description = forms.CharField(label="Описание", widget=CKEditorUploadingWidget())
+    description = forms.CharField(label="Описание", widget=CKEditorUploadingWidget(), required=False)
 
     class Meta:
         model = Category

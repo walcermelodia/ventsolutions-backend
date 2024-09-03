@@ -9,7 +9,7 @@ class Category(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     name = models.CharField('Название', max_length=256)
     image = models.ImageField('Изображение', name='image_path', upload_to='categories/')
-    description = models.TextField('Описание', null=True)
+    description = models.TextField('Описание', null=True, blank=True)
     translation = models.CharField('Транслитерация названия', max_length=256)
     parent = models.ForeignKey('self', verbose_name='Родительская категория', on_delete=models.SET_NULL, blank=True,
                                null=True)
