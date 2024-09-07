@@ -64,3 +64,25 @@ class Characteristic(models.Model):
     class Meta:
         verbose_name = 'Характеристика товара'
         verbose_name_plural = 'Характеристики товаров'
+
+
+class NewProduct(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    product = models.ForeignKey(Product, verbose_name='Товар', on_delete=models.CASCADE, null=False)
+
+    class Meta:
+        verbose_name = 'Новинки'
+        verbose_name_plural = 'Новинки'
+        db_table = 'shop_new_product'
+
+
+class SalesLeaderProduct(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    product = models.ForeignKey(Product, verbose_name='Товар', on_delete=models.CASCADE, null=False)
+
+    class Meta:
+        verbose_name = 'Лидеры продаж'
+        verbose_name_plural = 'Лидеры продаж'
+        db_table = 'shop_sales_leader_product'

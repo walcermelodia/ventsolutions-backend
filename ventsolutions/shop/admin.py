@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django import forms
 
-from .models import Category, Product, Image, Characteristic
+from .models import Category, Product, Image, Characteristic, NewProduct, SalesLeaderProduct
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from django.utils.safestring import mark_safe
 
@@ -53,7 +53,7 @@ class ProductAdmin(admin.ModelAdmin):
     inlines = [ImageInline, CharacteristicInline]
     save_on_top = True
     save_as = True
-    autocomplete_fields = ('category', )
+    autocomplete_fields = ('category',)
 
     def get_main_image(self, obj):
         images = Image.objects.filter(product__id=obj.id, is_main=True)
@@ -73,6 +73,22 @@ class CategoryAdmin(admin.ModelAdmin):
     form = CategoryAdminForm
 
     autocomplete_fields = ('parent',)
+
+
+@admin.register(NewProduct)
+class NewProductAdmin(admin.ModelAdmin):
+    list_display = ('product',)
+    list_display_links = ('product',)
+
+    autocomplete_fields = ('product',)
+
+
+@admin.register(SalesLeaderProduct)
+class SalesLeaderProductAdmin(admin.ModelAdmin):
+    list_display = ('product',)
+    list_display_links = ('product',)
+
+    autocomplete_fields = ('product',)
 
 
 admin.site.site_title = 'ООО \"Вент-Решения\"'

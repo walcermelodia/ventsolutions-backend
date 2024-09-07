@@ -83,3 +83,28 @@ class ProductPaginationSerializer(serializers.ModelSerializer):
     def get_main_image(self, obj):
         main_image = Image.objects.filter(product=obj, is_main=True).first()
         return ImageSerializer(main_image, context={'request': self.context['request']}).data
+
+
+class FeedbackSerializer(serializers.Serializer):
+    name = serializers.CharField(required=True, min_length=1)
+    phone = serializers.RegexField(regex=r'(\+?7|8)\d{10}$', required=True)
+    email = serializers.EmailField(required=True)
+    question = serializers.CharField(required=False)
+
+
+class OrderProductSerializer(serializers.Serializer):
+    id = serializers.IntegerField(required=True)
+    name = serializers.CharField(required=True)
+    count = serializers.IntegerField(required=True)
+
+
+class OrderSerializer(serializers.Serializer):
+    firstName = serializers.CharField(required=True)
+    lastName = serializers.CharField(required=True)
+    phone = serializers.RegexField(regex=r'(\+?7|8)\d{10}$', required=True)
+    email = serializers.EmailField(required=True)
+    inn = serializers.RegexField(regex=r'\d{12}$', required=False)
+    organizationName = serializers.CharField(required=False)
+    comment = serializers.CharField(required=False)
+    delivery = serializers.CharField(required=True)
+    products = serializers.ListField(child=OrderProductSerializer(), required=True, min_length=1)
