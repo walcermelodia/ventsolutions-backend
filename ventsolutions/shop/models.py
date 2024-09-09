@@ -69,7 +69,7 @@ class Characteristic(models.Model):
 class NewProduct(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    product = models.ForeignKey(Product, verbose_name='Товар', on_delete=models.CASCADE, null=False)
+    product = models.OneToOneField(Product, verbose_name='Товар', on_delete=models.CASCADE, null=False, unique=True)
 
     class Meta:
         verbose_name = 'Новинка'
@@ -80,7 +80,7 @@ class NewProduct(models.Model):
 class SalesLeaderProduct(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    product = models.ForeignKey(Product, verbose_name='Товар', on_delete=models.CASCADE, null=False)
+    product = models.OneToOneField(Product, verbose_name='Товар', on_delete=models.CASCADE, null=False, unique=True)
 
     class Meta:
         verbose_name = 'Лидер продаж'
