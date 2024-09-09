@@ -10,7 +10,7 @@ class Category(models.Model):
     name = models.CharField('Название', max_length=256)
     image = models.ImageField('Изображение', name='image_path', upload_to='categories/')
     description = models.TextField('Описание', null=True, blank=True)
-    translation = models.CharField('Транслитерация названия', max_length=256)
+    translation = models.CharField('Транслитерация названия', max_length=256, unique=True)
     parent = models.ForeignKey('self', verbose_name='Родительская категория', on_delete=models.SET_NULL, blank=True,
                                null=True)
 
@@ -25,12 +25,12 @@ class Category(models.Model):
 class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    part_number = models.CharField('Артикул', max_length=10)
+    part_number = models.CharField('Артикул', max_length=24)
     name = models.CharField('Название', max_length=256)
     price = models.DecimalField('Цена', decimal_places=2, max_digits=12, validators=[MinValueValidator(Decimal('0.0'))])
     discount = models.PositiveIntegerField('Скидка', validators=[MinValueValidator(0)])
     description = models.TextField('Описание')
-    translation = models.CharField('Транслитерация названия', max_length=256)
+    translation = models.CharField('Транслитерация названия', max_length=256, unique=True)
     in_stock = models.BooleanField('Наличие товара', default=True)
     category = models.ForeignKey(Category, verbose_name="Категория", on_delete=models.SET_NULL, null=True)
 
@@ -72,7 +72,7 @@ class NewProduct(models.Model):
     product = models.ForeignKey(Product, verbose_name='Товар', on_delete=models.CASCADE, null=False)
 
     class Meta:
-        verbose_name = 'Новинки'
+        verbose_name = 'Новинка'
         verbose_name_plural = 'Новинки'
         db_table = 'shop_new_product'
 
@@ -83,6 +83,6 @@ class SalesLeaderProduct(models.Model):
     product = models.ForeignKey(Product, verbose_name='Товар', on_delete=models.CASCADE, null=False)
 
     class Meta:
-        verbose_name = 'Лидеры продаж'
+        verbose_name = 'Лидер продаж'
         verbose_name_plural = 'Лидеры продаж'
         db_table = 'shop_sales_leader_product'

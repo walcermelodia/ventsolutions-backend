@@ -67,28 +67,51 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'translation', 'parent')
+    list_display = ('name', 'get_main_image', 'translation', 'parent')
     list_display_links = ('name',)
     search_fields = ('id', 'name', 'translation')
     form = CategoryAdminForm
 
     autocomplete_fields = ('parent',)
 
+    def get_main_image(self, obj):
+        return mark_safe(f'<img src={obj.image_path.url} width="50" height="60">')
+
+    get_main_image.short_description = 'Изображение категории'
+
 
 @admin.register(NewProduct)
 class NewProductAdmin(admin.ModelAdmin):
-    list_display = ('product',)
+    list_display = ('product', 'get_main_image')
     list_display_links = ('product',)
 
     autocomplete_fields = ('product',)
+
+    def get_main_image(self, obj):
+        images = Image.objects.filter(product__id=obj.product.id, is_main=True)
+        if len(images) < 1:
+            return None
+        else:
+            return mark_safe(f'<img src={images[0].path.url} width="50" height="60">')
+
+    get_main_image.short_description = 'Карточка товара'
 
 
 @admin.register(SalesLeaderProduct)
 class SalesLeaderProductAdmin(admin.ModelAdmin):
-    list_display = ('product',)
+    list_display = ('product', 'get_main_image',)
     list_display_links = ('product',)
 
     autocomplete_fields = ('product',)
+
+    def get_main_image(self, obj):
+        images = Image.objects.filter(product__id=obj.product.id, is_main=True)
+        if len(images) < 1:
+            return None
+        else:
+            return mark_safe(f'<img src={images[0].path.url} width="50" height="60">')
+
+    get_main_image.short_description = 'Карточка товара'
 
 
 admin.site.site_title = 'ООО \"Вент-Решения\"'

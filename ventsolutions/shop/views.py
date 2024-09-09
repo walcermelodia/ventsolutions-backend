@@ -164,11 +164,11 @@ class Order(APIView):
             email_template = f.read()
 
         product_ids = list(map(lambda x: x['id'], request.data['products']))
-        dict_products = dict(map(lambda x: (x.id, x), list(Product.objects.filter(id__in=product_ids))))
+        dict_products = dict(map(lambda x: (x.translation, x), list(Product.objects.filter(translation__in=product_ids))))
         html_products = []
         total_amount = 0.0
         for product in request.data['products']:
-            main_image = Image.objects.filter(product_id=product['id'], is_main=True).first()
+            main_image = Image.objects.filter(product_id=dict_products[product['id']].id, is_main=True).first()
             total_amount += product['count'] * float(dict_products[product['id']].price)
             item_prod_html = f'''
                               <tr>
@@ -226,10 +226,10 @@ class Order(APIView):
             contact_template.replace('{key}', 'email').replace('{value}', request.data['email']))
         html_contacts.append(
             contact_template.replace('{key}', 'phone').replace('{value}', request.data['phone']))
-        if request.data['inn'] is not None:
+        if 'inn' in request.data:
             html_contacts.append(
                 contact_template.replace('{key}', 'ИНН').replace('{value}', request.data['inn']))
-        if request.data['organizationName'] is not None:
+        if 'organizationName' in request.data:
             html_contacts.append(contact_template.replace('{key}', 'Название организации').replace('{value}',
                                                                                                    request.data[
                                                                                                        'organizationName']))
@@ -242,7 +242,7 @@ class Order(APIView):
             html_contacts.append(
                 contact_template.replace('{key}', 'Способ доставки').replace('{value}', ' До терминала ТК в СПБ'))
 
-        if request.data['comment'] is not None:
+        if 'comment' in request.data:
             html_contacts.append(
                 contact_template.replace('{key}', 'Комментарий').replace('{value}', request.data['comment']))
 

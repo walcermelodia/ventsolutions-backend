@@ -80,7 +80,7 @@ DATABASES = {
         'NAME': 'ventsolutions_db',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': '87.242.119.1',
+        'HOST': '192.144.14.242',
         'PORT': '5432'
     }
 }

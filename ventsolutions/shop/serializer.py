@@ -93,7 +93,7 @@ class FeedbackSerializer(serializers.Serializer):
 
 
 class OrderProductSerializer(serializers.Serializer):
-    id = serializers.IntegerField(required=True)
+    id = serializers.CharField(required=True)
     name = serializers.CharField(required=True)
     count = serializers.IntegerField(required=True)
 
