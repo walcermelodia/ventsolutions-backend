@@ -1,4 +1,4 @@
 /pg_data
 /.venv
 /.idea
-/ventsolutions/ventsolutions/settings.py
+/ventsolutions/.env
