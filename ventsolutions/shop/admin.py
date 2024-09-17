@@ -84,6 +84,7 @@ class CategoryAdmin(admin.ModelAdmin):
 class NewProductAdmin(admin.ModelAdmin):
     list_display = ('product', 'order', 'get_main_image')
     list_display_links = ('product',)
+    list_editable = ('order',)
 
     autocomplete_fields = ('product',)
 
@@ -101,6 +102,7 @@ class NewProductAdmin(admin.ModelAdmin):
 class SalesLeaderProductAdmin(admin.ModelAdmin):
     list_display = ('product', 'order', 'get_main_image',)
     list_display_links = ('product',)
+    list_editable = ('order',)
 
     autocomplete_fields = ('product',)
 
