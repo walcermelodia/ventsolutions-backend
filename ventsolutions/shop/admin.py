@@ -82,7 +82,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(NewProduct)
 class NewProductAdmin(admin.ModelAdmin):
-    list_display = ('product', 'get_main_image')
+    list_display = ('product', 'order', 'get_main_image')
     list_display_links = ('product',)
 
     autocomplete_fields = ('product',)
@@ -99,7 +99,7 @@ class NewProductAdmin(admin.ModelAdmin):
 
 @admin.register(SalesLeaderProduct)
 class SalesLeaderProductAdmin(admin.ModelAdmin):
-    list_display = ('product', 'get_main_image',)
+    list_display = ('product', 'order', 'get_main_image',)
     list_display_links = ('product',)
 
     autocomplete_fields = ('product',)

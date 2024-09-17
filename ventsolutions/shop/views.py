@@ -87,9 +87,9 @@ class ShowCase(generics.ListAPIView):
     def get_queryset(self):
         type_query = self.request.query_params['type']
         if type_query == 'NEW':
-            product_ids = list(map(lambda x: x.product.id, NewProduct.objects.all()))
+            product_ids = list(map(lambda x: x.product.id, NewProduct.objects.all().order_by('order')))
         elif type_query == 'SALES_LEADER':
-            product_ids = list(map(lambda x: x.product.id, SalesLeaderProduct.objects.all()))
+            product_ids = list(map(lambda x: x.product.id, SalesLeaderProduct.objects.all().order_by('order')))
 
         return Product.objects.filter(id__in=product_ids)
 
@@ -157,7 +157,6 @@ class Feedback(APIView):
 
 class Order(APIView):
     def post(self, request):
-        print(request.data)
         serializer = OrderSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -227,10 +226,10 @@ class Order(APIView):
             contact_template.replace('{key}', 'email').replace('{value}', request.data['email']))
         html_contacts.append(
             contact_template.replace('{key}', 'phone').replace('{value}', request.data['phone']))
-        if 'inn' in request.data:
+        if 'inn' in request.data and request.data['inn'] is not None:
             html_contacts.append(
                 contact_template.replace('{key}', 'ИНН').replace('{value}', request.data['inn']))
-        if 'organizationName' in request.data:
+        if 'organizationName' in request.data and request.data['organizationName'] is not None:
             html_contacts.append(contact_template.replace('{key}', 'Название организации').replace('{value}',
                                                                                                    request.data[
                                                                                                        'organizationName']))
@@ -243,7 +242,7 @@ class Order(APIView):
             html_contacts.append(
                 contact_template.replace('{key}', 'Способ доставки').replace('{value}', ' До терминала ТК в СПБ'))
 
-        if 'comment' in request.data:
+        if 'comment' in request.data and request.data['comment'] is not None:
             html_contacts.append(
                 contact_template.replace('{key}', 'Комментарий').replace('{value}', request.data['comment']))
 

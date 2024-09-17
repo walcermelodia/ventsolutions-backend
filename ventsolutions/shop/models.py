@@ -69,6 +69,7 @@ class Characteristic(models.Model):
 class NewProduct(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    order = models.PositiveIntegerField(verbose_name='Порядок', null=False, default=1)
     product = models.OneToOneField(Product, verbose_name='Товар', on_delete=models.CASCADE, null=False, unique=True)
 
     class Meta:
@@ -80,6 +81,7 @@ class NewProduct(models.Model):
 class SalesLeaderProduct(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    order = models.PositiveIntegerField(verbose_name='Порядок', null=False, default=1)
     product = models.OneToOneField(Product, verbose_name='Товар', on_delete=models.CASCADE, null=False, unique=True)
 
     class Meta:
