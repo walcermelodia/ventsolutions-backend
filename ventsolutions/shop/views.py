@@ -254,7 +254,7 @@ class Order(APIView):
 
 def send_feedback_message(html_template):
     from_address = 'info-ventsolutions@vent-resh.ru'
-    to_address = 'gr1g.kim@yandex.ru'
+    to_address = 'info@vent-resh.ru'
     password = 'tABFgf6VKkakzJWgik54'
 
     msg = MIMEMultipart()
@@ -273,7 +273,7 @@ def send_feedback_message(html_template):
 
 def send_order_message(email_template):
     from_address = 'info-ventsolutions@vent-resh.ru'
-    to_address = 'gr1g.kim@yandex.ru'
+    to_address = 'info@vent-resh.ru'
     password = 'tABFgf6VKkakzJWgik54'
 
     msg = MIMEMultipart()
