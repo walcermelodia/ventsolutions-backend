@@ -103,7 +103,7 @@ class OrderSerializer(serializers.Serializer):
     lastName = serializers.CharField(required=True)
     phone = serializers.RegexField(regex=r'(\+?7|8)\d{10}$', required=True)
     email = serializers.EmailField(required=True)
-    inn = serializers.RegexField(regex=r'\d{12}$', required=False, allow_null=True, allow_blank=True)
+    inn = serializers.RegexField(regex=r'\d$', required=False, allow_null=True, allow_blank=True, min_length=10, max_length=12)
     organizationName = serializers.CharField(required=False, allow_null=True, allow_blank=True)
     comment = serializers.CharField(required=False, allow_null=True, allow_blank=True)
     delivery = serializers.CharField(required=True)
