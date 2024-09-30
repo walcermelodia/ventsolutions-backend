@@ -88,6 +88,9 @@ class NewProductAdmin(admin.ModelAdmin):
 
     autocomplete_fields = ('product',)
 
+    def get_queryset(self, request):
+        return super().get_queryset(request).order_by('order')
+
     def get_main_image(self, obj):
         images = Image.objects.filter(product__id=obj.product.id, is_main=True)
         if len(images) < 1:
@@ -105,6 +108,9 @@ class SalesLeaderProductAdmin(admin.ModelAdmin):
     list_editable = ('order',)
 
     autocomplete_fields = ('product',)
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).order_by('order')
 
     def get_main_image(self, obj):
         images = Image.objects.filter(product__id=obj.product.id, is_main=True)

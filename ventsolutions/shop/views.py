@@ -1,3 +1,5 @@
+import os
+
 from rest_framework import generics, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -9,6 +11,9 @@ from .serializer import CategorySerializer, ProductSerializer, ProductDetailSeri
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def bin_search(l, r, data, id):
@@ -91,7 +96,11 @@ class ShowCase(generics.ListAPIView):
         elif type_query == 'SALES_LEADER':
             product_ids = list(map(lambda x: x.product.id, SalesLeaderProduct.objects.all().order_by('order')))
 
-        return Product.objects.filter(id__in=product_ids)
+        products_dict = dict(map(lambda x: (x.id, x), Product.objects.filter(id__in=product_ids)))
+        result = []
+        for product_id in product_ids:
+            result.append(products_dict[product_id])
+        return result
 
     def get_serializer(self, *args, **kwargs):
         kwargs['context'] = {'request': self.request}
@@ -253,9 +262,9 @@ class Order(APIView):
 
 
 def send_feedback_message(html_template):
-    from_address = 'info-ventsolutions@vent-resh.ru'
-    to_address = 'info@vent-resh.ru'
-    password = 'tABFgf6VKkakzJWgik54'
+    from_address = os.environ.get('EMAIL_SENDER')
+    to_address = os.environ.get('EMAIL_RECIPIENT')
+    password = os.environ.get('SMTP_PASSWORD')
 
     msg = MIMEMultipart()
     msg['From'] = from_address
@@ -272,9 +281,9 @@ def send_feedback_message(html_template):
 
 
 def send_order_message(email_template):
-    from_address = 'info-ventsolutions@vent-resh.ru'
-    to_address = 'info@vent-resh.ru'
-    password = 'tABFgf6VKkakzJWgik54'
+    from_address = os.environ.get('EMAIL_SENDER')
+    to_address = os.environ.get('EMAIL_RECIPIENT')
+    password = os.environ.get('SMTP_PASSWORD')
 
     msg = MIMEMultipart()
     msg['From'] = from_address
